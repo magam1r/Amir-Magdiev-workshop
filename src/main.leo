@@ -33,15 +33,15 @@ program magam1rtoken.aleo {
 
           return then finalize(self.caller,receiver,amount);
 
-     };
+     }
      
       finalize transfer_public(public sender:address, public receiver:address , public amount:u64) {
 
-        let sender_amount:u64 = mapping::get_or_use(account,sender,0u64);
-        mapping::set(account,sender , sender_amount - amount);
+        let sender_amount:u64 = Mapping::get_or_use(account,sender,0u64);
+        Mapping::set(account,sender , sender_amount - amount);
 
-        let receiver_amount:u64 = mapping::get_or_use(account,receiver ,0u64 );
-        mapping::set(account,receiver , receiver_amount + amount);
+        let receiver_amount:u64 = Mapping::get_or_use(account,receiver ,0u64 );
+        Mapping::set(account,receiver , receiver_amount + amount);
 
        } 
 
@@ -49,15 +49,15 @@ program magam1rtoken.aleo {
       transition transfer_private(sender:token, receiver:address, amount: u64)-> (token, token ){
         let difference : u64 = sender.amount- amount ;
 
-        let remaining : token =token {
+        let remaining : token = token (
           owner : sender ,
           account : difference
-        };
+        );
 
-      let transferred : token =token {
+      let transferred : token = token (
         owner : receiver,
         amount : amount
-      };
+      );
 
       return( remaining , transferred );
 
@@ -74,19 +74,20 @@ program magam1rtoken.aleo {
       }
 
       finalize transfer_private_to_public( public receiver:address, public amount:u64){
-        let receiver_amount:u64 = mapping::get_or_use(account,receiver,0u64);
-        mapping::set(account,receiver,receiver_amount + amount);
+        let receiver_amount:u64 = Mapping::get_or_use(account,receiver,0u64);
+        Mapping::set(account,receiver,receiver_amount + amount);
       }
     transition transfer_public_to_private(receiver:address ,amount:u64)-> token {
-        let transferred token = tojen {
-          owner : receiver ,
+        let transferred token = token (
+          owner : receiver,  
           amount: amount
-        }
+        );
 
         return transferred then finalize(self.caller , amount);
         }
      finalize transfer_public_to_private( public sender :address , public amount : u64) {
-        let receiver_amount : u64 = mapping::get_or_used(account,receiver , 0u64);
-        mapping::set (account,sender , sender_amount - amount);    
+        let sender_amount : u64 = Mapping::get_or_used(account,sender, 0u64);
+        Mapping::set (account,sender , sender_amount - amount);    
          }   
 } 
+  
