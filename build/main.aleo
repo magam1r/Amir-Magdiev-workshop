@@ -1,4 +1,4 @@
-program templateankara.aleo;
+program magam1rtoken.aleo;
 
 
 
